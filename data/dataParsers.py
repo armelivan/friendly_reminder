@@ -4,15 +4,26 @@ class DataParsers:
 
 
 
+    def parseInput(self,elementToParse,type) ->bool:
+        if type =="name":
+            self.validateName(elementToParse)
+        elif type == "frequency":
+            self.validateFrequency(elementToParse)
+        elif type == "period":
+            validatePeriod(elementToParse)
+        else: # start date 
+            self.validateDate(elementToParse)
+
+
     # Objects parsing
-    def validateName():
+    def validateName(self):
         pass
 
-    def validateFrequency():
+    def validateFrequency(self):
         pass
 
-    def validatePeriod():
+    def validatePeriod(self):
         pass
 
-    def validateDate():
+    def validateDate(self):
         pass

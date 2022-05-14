@@ -2,6 +2,7 @@ import typer
 from rich.console import Console
 from rich.table import Table 
 from data.dataHelpers import DataHelpers
+from data.dataParsers import DataParsers
 
 
 #Typer is a CLI library 
@@ -22,6 +23,7 @@ INFO_TO_MODIFY_PROMPT="Do you want to modify:\n0.Cancel\n1.Frequency\n2.Name\n3.
 
 # needed linked classes 
 DataHelper= DataHelpers()
+InputParser = DataParsers()
 
 
 
@@ -90,17 +92,17 @@ def completeMissingPersonInfo(name,frequency,startDate):
     infoPerson = {"name":name,"frequency":frequency,"startDate":startDate}
     if name == None:
         infoPerson["name"]= input(PERSON_NAME_PROMPT)
-        while(inputParser("name",infoPerson["name"])==False):
+        while(InputParser.parseInput.parseInput("name",infoPerson["name"])==False):
             infoPerson["name"]= input(PERSON_NAME_INVALID_PROMPT)
     
     if frequency == None:
         infoPerson["frequency"]= input(FREQUENCY_PROMPT)
-        while(inputParser("frequency",infoPerson["frequency"])==False):
+        while(InputParser.parseInput("frequency",infoPerson["frequency"])==False):
             infoPerson["frequency"]= input(FRREQUENCY_INVALID_PROMPT)
     
     if startDate == None:
        infoPerson["startDate"]= input(START_DATE_PROMPT)
-       while(inputParser("startDate",infoPerson["startDate"])==False):
+       while(InputParser.parseInput("startDate",infoPerson["startDate"])==False):
             infoPerson["startDate"]= input(START_DATE_INVALID_PROMPT)
 
     return infoPerson
@@ -111,7 +113,7 @@ def completeMissingPersonInfo(name,frequency,startDate):
 def completeMissingModifyingInfo(name,onlyName):
     if name == None:
         checkedName = input(PERSON_NAME_PROMPT)
-        while(inputParser("name",checkedName)==False):
+        while(InputParser.parseInput("name",checkedName)==False):
             checkedName = input(PERSON_NAME_INVALID_PROMPT)
 
     if not onlyName:
@@ -125,29 +127,18 @@ def completeMissingModifyingInfo(name,onlyName):
 def completeInfoFreezePerson(name,period):
     if name == None:
         checkedName = input(PERSON_NAME_PROMPT)
-        while(inputParser("name",checkedName)==False):
+        while(InputParser.parseInput("name",checkedName)==False):
             checkedName = input(PERSON_NAME_INVALID_PROMPT)
         
     if period == None:
         checkedPeriod = input(PERSON_NAME_PROMPT)
-        while(inputParser("period",checkedPeriod)==False):
+        while(InputParser.parseInput("period",checkedPeriod)==False):
             checkedName = input(PERSON_NAME_INVALID_PROMPT)
 
     return {checkedName,checkedPeriod}
 
 
 
-
-
-def inputParser(elementToParse,type) ->bool:
-    if type =="name":
-        validateName(elementToParse)
-    elif type == "frequency":
-        validateFrequency(elementToParse)
-    elif type == "period":
-        validatePeriod(elementToParse)
-    else: # start date 
-        validateDate(elementToParse)
 
 # Insure that the format inputed in the function is good
 if __name__ =="__main__":
