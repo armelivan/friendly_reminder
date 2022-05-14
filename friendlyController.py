@@ -15,64 +15,63 @@ PERSON_NAME_PROMPT ="Please enter the person name: "
 FREQUENCY_PROMPT = "Please enter the frequency of contact in the format d,w,m,q: "
 START_DATE_PROMPT = "Please enter the person startDate in the format dd/mm/yyyy: "
 
+
 # needed linked classes 
 DataHelper= DataHelpers()
 
 
 
-'''
-Error cases: 
-1. person already exists in the dataBase 
-    -> do you want to modify the person info instead
-'''
 
+# create a new reminder (name,frequency,startDate)
+# and add it in the data base 
 @app.command()
 def addReminder(name:str=None,frequency:str=None,startDate:str=None):
     infoReminder= completeMissingPersonInfo(name,frequency,startDate)
-    DataHelper.isReminderInDataBase(infoReminder)
-    typer.echo(f"adding a new person {name}, {frequency},{startDate}")
-    pass
+    DataHelper.addReminder(infoReminder)
+   
 
+#The function prompt the user with a given name and then asked the info
+# he want to modify and then enter it 
+@app.command()
+def modifyPersonInfo(name:str=None):
+    infoToModify = completeMissingModifyingInfo(name)
+    DataHelper.modifyInfo(infoToModify)
+    
+    
+@app.command()
+def freezePerson(name:str=None,period:str=None):
+    freezingHandler(True,name,period)
 
 @app.command()
-def modifyPersonInfo():
-    typer.echo(f"modifying  person info")
-    pass
+def UnfreezePerson(name:str=None,period:str=None):
+    freezingHandler(False,name,period)   
 
 @app.command()
-def freezePerson():
-    typer.echo(f"freezing person")
-    pass 
+def removeReminder(name:str=None):
+    infoReminder = completeMissingModifyingInfo(name)
+    DataHelper.removeReminder(infoReminder)
 
 @app.command()
-def removePerson():
-    typer.echo(f"supprimer person")
-    pass
-
-@app.command()
-def showPersonInfo():
-    typer.echo(f"montrer info person")
-    pass
+def showPersonInfo(name:str=None):
+    infoReminder = completeMissingModifyingInfo(name)
+    DataHelper.showPersonInfo(infoReminder)
 
 @app.command()
 def showAllPersonsInfo():
-    typer.echo(f"show all persons ")
-    pass
+    DataHelper.showAllPersonInfo()
 
 @app.command()
 def showPersonsToContact():
-    typer.echo(f"Show all person to contact")
-    pass
+    DataHelper.showPersonsToContact()
 
 
 
 '''
-Error cases: 
+TODO:Error cases: 
 1. format of name/frequency/startDate is not good
     -> loop until we have a good format 
 2. StartDate is posterior to the current date: 
     -> prompt : Changing date to posterior or current date 
-
 '''
 
 # check if there is missing info on the personne 
@@ -86,6 +85,20 @@ def completeMissingPersonInfo(name,frequency,startDate):
     if startDate==None:
        infoPerson["startDate"]= input(START_DATE_PROMPT)
     return infoPerson
+
+
+#return the info to modify
+def completeMissingModifyingInfo(name):
+    pass
+
+# stop tracking the person for a given period
+def CompleteInfoFreezePerson(name,period):
+    pass
+
+#Freezing or Unfreezing a given person
+def freezingHandler(toFreeze,name,period):
+    infoReminder= CompleteInfoFreezePerson(name,period)
+    DataHelper.HandleFreeze(infoReminder,toFreeze)
 
 if __name__ =="__main__":
     app()
