@@ -11,10 +11,14 @@ app = typer.Typer()
 
 
 # List of prompts
-PERSON_NAME_PROMPT ="Please enter the person name: "
-FREQUENCY_PROMPT = "Please enter the frequency of contact in the format d,w,m,q: "
-START_DATE_PROMPT = "Please enter the person startDate in the format dd/mm/yyyy: "
 
+PERSON_NAME_PROMPT ="Please enter the person name: "
+PERSON_NAME_INVALID_PROMPT="You provided an invalid person name, please input a new value:"
+FREQUENCY_PROMPT = "Please enter the frequency of contact in the format d,w,m,q: "
+FRREQUENCY_INVALID_PROMPT = "You provided an invalid frequency, please input a new value:"
+START_DATE_PROMPT = "Please enter the person startDate in the format dd/mm/yyyy: "
+START_DATE_INVALID_PROMPT = "You provided an invalid frequency, please input a new value:"
+INFO_TO_MODIFY_PROMPT="Do you want to modify:\n0.Cancel\n1.Frequency\n2.Name\n3.Start Date"
 
 # needed linked classes 
 DataHelper= DataHelpers()
@@ -34,7 +38,7 @@ def addReminder(name:str=None,frequency:str=None,startDate:str=None):
 # he want to modify and then enter it 
 @app.command()
 def modifyPersonInfo(name:str=None):
-    infoToModify = completeMissingModifyingInfo(name)
+    infoToModify = completeMissingModifyingInfo(name,False)
     DataHelper.modifyInfo(infoToModify)
     
     
@@ -48,12 +52,12 @@ def UnfreezePerson(name:str=None,period:str=None):
 
 @app.command()
 def removeReminder(name:str=None):
-    infoReminder = completeMissingModifyingInfo(name)
+    infoReminder = completeMissingModifyingInfo(name,True)
     DataHelper.removeReminder(infoReminder)
 
 @app.command()
 def showPersonInfo(name:str=None):
-    infoReminder = completeMissingModifyingInfo(name)
+    infoReminder = completeMissingModifyingInfo(name,True)
     DataHelper.showPersonInfo(infoReminder)
 
 @app.command()
@@ -66,6 +70,12 @@ def showPersonsToContact():
 
 
 
+#Freezing or Unfreezing a given person
+def freezingHandler(toFreeze,name,period):
+    infoReminder= completeInfoFreezePerson(name,period)
+    DataHelper.HandleFreeze(infoReminder,toFreeze)
+
+
 '''
 TODO:Error cases: 
 1. format of name/frequency/startDate is not good
@@ -76,29 +86,69 @@ TODO:Error cases:
 
 # check if there is missing info on the personne 
 def completeMissingPersonInfo(name,frequency,startDate):
+
     infoPerson = {"name":name,"frequency":frequency,"startDate":startDate}
-    if name==None:
+    if name == None:
         infoPerson["name"]= input(PERSON_NAME_PROMPT)
-    if frequency ==None:
-        infoPerson["frequency"]= input(FREQUENCY_PROMPT)
+        while(inputParser("name",infoPerson["name"])==False):
+            infoPerson["name"]= input(PERSON_NAME_INVALID_PROMPT)
     
-    if startDate==None:
+    if frequency == None:
+        infoPerson["frequency"]= input(FREQUENCY_PROMPT)
+        while(inputParser("frequency",infoPerson["frequency"])==False):
+            infoPerson["frequency"]= input(FRREQUENCY_INVALID_PROMPT)
+    
+    if startDate == None:
        infoPerson["startDate"]= input(START_DATE_PROMPT)
+       while(inputParser("startDate",infoPerson["startDate"])==False):
+            infoPerson["startDate"]= input(START_DATE_INVALID_PROMPT)
+
     return infoPerson
 
 
+
 #return the info to modify
-def completeMissingModifyingInfo(name):
-    pass
+def completeMissingModifyingInfo(name,onlyName):
+    if name == None:
+        checkedName = input(PERSON_NAME_PROMPT)
+        while(inputParser("name",checkedName)==False):
+            checkedName = input(PERSON_NAME_INVALID_PROMPT)
+
+    if not onlyName:
+        infoToModify = input(INFO_TO_MODIFY_PROMPT)
+
+    return {checkedName,infoToModify}
+
+
 
 # stop tracking the person for a given period
-def CompleteInfoFreezePerson(name,period):
-    pass
+def completeInfoFreezePerson(name,period):
+    if name == None:
+        checkedName = input(PERSON_NAME_PROMPT)
+        while(inputParser("name",checkedName)==False):
+            checkedName = input(PERSON_NAME_INVALID_PROMPT)
+        
+    if period == None:
+        checkedPeriod = input(PERSON_NAME_PROMPT)
+        while(inputParser("period",checkedPeriod)==False):
+            checkedName = input(PERSON_NAME_INVALID_PROMPT)
 
-#Freezing or Unfreezing a given person
-def freezingHandler(toFreeze,name,period):
-    infoReminder= CompleteInfoFreezePerson(name,period)
-    DataHelper.HandleFreeze(infoReminder,toFreeze)
+    return {checkedName,checkedPeriod}
 
+
+
+
+
+def inputParser(elementToParse,type) ->bool:
+    if type =="name":
+        validateName(elementToParse)
+    elif type == "frequency":
+        validateFrequency(elementToParse)
+    elif type == "period":
+        validatePeriod(elementToParse)
+    else: # start date 
+        validateDate(elementToParse)
+
+# Insure that the format inputed in the function is good
 if __name__ =="__main__":
     app()
