@@ -14,8 +14,17 @@ class TestDataParsers(unittest.TestCase):
         self.assertFalse(Input.validateDate("2019/01/31"))
         self.assertFalse(Input.validateDate(""))
 
-        
+    def test_validateFrequency(self):
+        self.assertTrue(Input.validateFrequency("q"))
+        self.assertTrue(Input.validateFrequency("W"))
+        self.assertTrue(Input.validateFrequency("m"))
+        self.assertFalse(Input.validateFrequency(""))
+        self.assertFalse(Input.validateFrequency("."))
 
+    def test_validatePeriod(self):
+        self.assertTrue(Input.validatePeriod(["2022-07-12","2022-07-25"]))
+        self.assertFalse(Input.validatePeriod(["2022-02-22","2022-06-25"]))
+        self.assertFalse(Input.validatePeriod("asdsad"))
 
 if __name__ == '__main__':
     unittest.main()

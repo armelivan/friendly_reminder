@@ -1,9 +1,10 @@
-from datetime import datetime
+from datetime import datetime,date 
 class DataParsers:
+    
     def __init__(self):
-        pass
+        self.DATEFORMAT = '%Y-%m-%d'
 
-
+            
 
     def parseInput(self,elementToParse,type)->bool:
         if type =="name":
@@ -25,18 +26,37 @@ class DataParsers:
         return not name.isnumeric
             
 
-    def validateFrequency(self):
-        pass
+    def validateFrequency(self,freq:str):
+        return freq.lower()  in ("q","w","m")
 
-    def validatePeriod(self):
-        pass
+    #Format start date, end date (yyy-mm-dd,yyy-mm-dd)
+    def validatePeriod(self,period):
+        try:
+            if len(period)!=2:
+                return False
+            if len(period[0])!=10 or len(period[1])!=10:
+                return False
+
+            if (self.validateDate(period[0]) and self.validateDate(period[1]))==False:
+                return False 
+            startDate = datetime.strptime(period[0], self.DATEFORMAT )
+            endDate = datetime.strptime(period[1], self.DATEFORMAT )
+            todayString = datetime.today().strftime(self.DATEFORMAT )
+            todayDate = datetime.strptime(todayString,self.DATEFORMAT )
+
+            if startDate>=endDate:
+
+                return False
+            return startDate >= todayDate
+        except:
+            return False
+
 
     #Format yyy-mm-dd
     def validateDate(self,dateString:str)->bool:
         try:
-            datetime.strptime(dateString, '%Y-%m-%d')
+            datetime.strptime(dateString, self.DATEFORMAT)
             return True
         except ValueError:
             return False
 
-    

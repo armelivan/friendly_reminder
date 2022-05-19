@@ -15,7 +15,7 @@ app = typer.Typer()
 
 PERSON_NAME_PROMPT ="Please enter the person name: "
 PERSON_NAME_INVALID_PROMPT="You provided an invalid person name, please input a new value:"
-FREQUENCY_PROMPT = "Please enter the frequency of contact in the format d,w,m,q: "
+FREQUENCY_PROMPT = "Please enter the frequency of contact in the format w,m,q: "
 FRREQUENCY_INVALID_PROMPT = "You provided an invalid frequency, please input a new value:"
 START_DATE_PROMPT = "Please enter the person startDate in the format dd/mm/yyyy: "
 START_DATE_INVALID_PROMPT = "You provided an invalid frequency, please input a new value:"
@@ -27,6 +27,9 @@ InputParser = DataParsers()
 
 
 
+"""
+--  Commands 
+"""
 
 # create a new reminder (name,frequency,startDate)
 # and add it in the data base 
@@ -78,6 +81,10 @@ def freezingHandler(toFreeze,name,period):
     DataHelper.HandleFreeze(infoReminder,toFreeze)
 
 
+
+"""
+--  Helpers functions 
+"""
 '''
 TODO:Error cases: 
 1. format of name/frequency/startDate is not good
