@@ -8,5 +8,6 @@ class Reminder:
         self.startDate=startDate;
         self.onFreeze = onFreeze;
         self.frozenPeriod = frozenPeriod;
+        self.reachingDate;
     def __repr__(self) -> str:
         return f"(PersonName:{self.personName},\nreminderNumber:{self.reminderNumber},\nFrequency:{self.frequency},\nStartDate:{self.startDate},\nOnFreeze:{self.onFreeze},\nFrozenPeriod:{self.frozenPeriod})"

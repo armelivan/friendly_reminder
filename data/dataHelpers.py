@@ -1,5 +1,7 @@
 
 import typer
+from data.database import databaseHandler;
+DB_PATH = "data/datase.py";
 
 # List of prompt 
 REMINDER_ALREADY_IN_DB="The reminder is already in DB"
@@ -7,15 +9,7 @@ REMINDER_ALREADY_IN_DB="The reminder is already in DB"
 class DataHelpers:
     def __init__(self):
         pass
-    '''
-    TODO:Error cases: 
-    1. person already exists in the dataBase 
-        -> do you want to modify the person info insteasd
-    '''
 
-    @classmethod
-    def isReminderInDataBase(self,infoReminder) -> bool:
-        return False
 
     #receive info, look in the DB if there and modify it 
     def modifyInfo(infoToModify):

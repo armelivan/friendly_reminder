@@ -16,8 +16,6 @@ class DataParsers:
             return self.validatePeriod(elementToParse)
         else: # start date 
             return self.validateDate(elementToParse)
-        
-
 
    #name: most be different than empty space 
    #does not contain 
