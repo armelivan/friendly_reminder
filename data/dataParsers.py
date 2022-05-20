@@ -1,4 +1,5 @@
-from datetime import datetime,date 
+from datetime import datetime,date
+from pickle import TRUE 
 class DataParsers:
     
     def __init__(self):
@@ -6,24 +7,24 @@ class DataParsers:
 
             
 
-    def parseInput(self,elementToParse,type)->bool:
+    def parseInput(self,type,elementToParse)->bool:
         if type =="name":
-            self.validateName(elementToParse)
+            return self.validateName(elementToParse)
         elif type == "frequency":
-            self.validateFrequency(elementToParse)
+            return self.validateFrequency(elementToParse)
         elif type == "period":
-            self.validatePeriod(elementToParse)
+            return self.validatePeriod(elementToParse)
         else: # start date 
-            self.validateDate(elementToParse)
-        return False
+            return self.validateDate(elementToParse)
+        
 
 
    #name: most be different than empty space 
    #does not contain 
     def validateName(self,name):
-        if name == "":
+        if name == "" or name==None:
             return False
-        return not name.isnumeric
+        return True
             
 
     def validateFrequency(self,freq:str):
